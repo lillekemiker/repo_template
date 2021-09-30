@@ -48,7 +48,7 @@ def substitute_placeholders(filename: str, placeholder_map: Dict[str, str]):
     changed = False
     for placeholder, value in placeholder_map.items():
         if placeholder in content:
-            content.replace(placeholder, value)
+            content = content.replace(placeholder, value)
             changed = True
     if changed:
         with filename.open("w") as fh:
@@ -56,7 +56,9 @@ def substitute_placeholders(filename: str, placeholder_map: Dict[str, str]):
 
 
 def create_src_dir():
-    (REPO_DIR / REPO_DIR.name).mkdir(parents=True, exist_ok=True)
+    src_dir = REPO_DIR / REPO_DIR.name
+    src_dir.mkdir(parents=True, exist_ok=True)
+    (src_dir / "__init__.py").touch()
 
 
 def rename_github_dir():
@@ -67,6 +69,13 @@ def cleanup():
     THIS_FILE.unlink()
 
 
+def git_commit(repo_path: Path):
+    add_cmd = ["git", "add", "."]
+    subprocess.run(add_cmd, cwd=repo_path, check=True)
+    commit_cmd = ["git", "commit", "-m", "Templatize"]
+    subprocess.run(commit_cmd, cwd=repo_path, check=True)
+
+
 def main():
     files = recursive_get_files(REPO_DIR, EXCEPTED_FILES)
     for filename in files:
@@ -74,6 +83,7 @@ def main():
     create_src_dir()
     rename_github_dir()
     cleanup()
+    git_commit(REPO_DIR)
 
 
 if __name__ == "__main__":

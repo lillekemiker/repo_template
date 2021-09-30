@@ -17,11 +17,16 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Install dependencies with pip
+      - name: Add ssh-agent for private requirements
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Install dependencies
         run: |
           pip install --upgrade pip wheel
           pip install -r requirements_dev.txt
-          pip install .
+          pip install -r requirements.txt
 
       - run: isort --diff .
       - run: black --check .

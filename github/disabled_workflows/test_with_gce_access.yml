@@ -17,11 +17,19 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Install dependencies with pip
+      - name: Setup Google Cloud
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: '290.0.1'
+          service_account_key: ${{ secrets.GCE_SERVICE_ACCOUNT_KEY }}
+          project_id: sense-staging
+          export_default_credentials: true
+
+      - name: Install dependencies
         run: |
           pip install --upgrade pip wheel
           pip install -r requirements_dev.txt
-          pip install .
+          pip install -r requirements.txt
 
       - run: isort --diff .
       - run: black --check .
