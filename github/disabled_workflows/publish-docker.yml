@@ -1,0 +1,26 @@
+name: Publish docker image
+
+on:
+  push:
+    tags: "*"
+
+# NOT TESTED
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+    - name: Publish to Google Cloud Registry
+      uses: whoan/docker-build-with-cache-action@v5
+      with:
+        username: _json_key
+        password: "${{ secrets.GCLOUD_JSON_KEY }}"
+        registry: gcr.io
+        image_name: {{REPO_NAME}}
+        image_tag: latest,${{ steps.get_version.outputs.VERSION }}
+        dockerfile: docker/Dockerfile

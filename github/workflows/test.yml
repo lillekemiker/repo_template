@@ -1,0 +1,29 @@
+name: Unit Testing, Flake8, MyPy, iSort, and Black
+
+on: 
+  pull_request: {}
+  push:
+    branches: master
+    tags: "*"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Install dependencies with pip
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements_dev.txt
+
+      - run: isort --diff .
+      - run: black --check .
+      - run: flake8
+      - run: mypy
+      - run: pytest --cov --cov-fail-under=90 --cov-report term-missing

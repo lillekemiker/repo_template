@@ -1,0 +1,22 @@
+name: Docker build test
+
+on: 
+  pull_request: {}
+  push:
+    branches: master
+    tags: "*"
+
+jobs:
+  docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build docker image
+        run: docker build -f ./docker/Dockerfile -t {{REPO_NAME}}:test .
+
+      - name: Smoke test docker image
+        run: |
+          docker run -d --rm {{REPO_NAME}}:test
+          sleep 5
+          docker stop {{REPO_NAME}}:test

@@ -1,0 +1,9 @@
+# Ignore everything
+**
+
+# ... except for dependencies and source
+!requirements.txt
+!requirements_private.txt
+!setup.py
+!setup.cfg
+!{{REPO_NAME}}
