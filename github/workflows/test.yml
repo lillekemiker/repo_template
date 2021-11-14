@@ -23,7 +23,7 @@ jobs:
           pip install -r requirements_dev.txt
           pip install .
 
-      - run: isort --diff .
+      - run: isort --check-only .
       - run: black --check .
       - run: flake8
       - run: mypy
