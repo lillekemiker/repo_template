@@ -1,8 +1,7 @@
-import setuptools
-
 from distutils.core import setup
-
 from pathlib import Path
+
+import setuptools
 
 REQUIREMENTS_PATH = Path(__file__).parent / "requirements.txt"
 PRIVATE_REQUIREMENTS_PATH = Path(__file__).parent / "requirements_private.txt"
